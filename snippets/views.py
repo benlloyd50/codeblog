@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 
-from snippets.models import Snippet
-from snippets.permissions import IsOwnerOrReadOnly
-from snippets.serializers import SnippetSerializer, UserSerializer
+from snippets.models import BannedUser, Snippet
+from snippets.permissions import IsOwnerOrReadOnly, IsNotBanned
+from snippets.serializers import BannedUserSerializer, SnippetSerializer, UserSerializer
 from django.contrib.auth.models import User
 
 
@@ -29,7 +29,11 @@ class SnippetViewSet(viewsets.ModelViewSet):
 
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        IsOwnerOrReadOnly,
+        IsNotBanned,
+    ]
 
     @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
     def highlight(self, request, *args, **kwargs):
@@ -45,3 +49,15 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class BannedUserViewSet(viewsets.ModelViewSet):
+    """Model Viewset
+    Combines CRUD and list view actions
+
+    Snippet can also be highlighted
+    """
+
+    queryset = BannedUser.objects.all()
+    serializer_class = BannedUserSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]

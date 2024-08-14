@@ -7,6 +7,7 @@ from pygments.styles import get_all_styles
 LEXERS = [item for item in get_all_lexers() if item[1]]
 LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
 STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
+BANNED_STATUS = [(item, item) for item in ["BANNED", "SQUASHED"]]
 
 
 class Snippet(models.Model):
@@ -35,3 +36,17 @@ class Snippet(models.Model):
         )
         self.highlighted = highlight(self.code, lexer, formatter)
         super().save(*args, **kwargs)
+
+
+class BannedUser(models.Model):
+    user_id = models.OneToOneField(
+        "auth.User",
+        related_name="banned_users",
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    status = models.CharField(choices=BANNED_STATUS, default="BANNED", max_length=100)
+
+    def is_banned(self):
+        """Checks the status is equal to `BANNED`"""
+        return self.status == "BANNED"

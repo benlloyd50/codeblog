@@ -9,6 +9,7 @@ The intent is to provide a developed application using django-restframework.
 - [X] Endpoints supporting CRUD operations backed by auth
 - [X] Readonly endpoints not requiring auth
 - [X] Tests for the endpoints to check for validation and success
+- [X] Banned users
 - [ ] A Frontend
 
 ## Contributing
