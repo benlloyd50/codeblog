@@ -1,12 +1,18 @@
-from rest_framework import permissions, renderers, viewsets
+from rest_framework import permissions, renderers, viewsets, generics
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 
-from snippets.models import BannedUser, Snippet
+from snippets.models import BannedUser, Snippet, SavedSnippet, SnippetSave
+from snippets.serializers import (
+    BannedUserSerializer,
+    SnippetSerializer,
+    UserSerializer,
+    SavedSnippetSerializer,
+    SnippetSaveSerializer,
+)
 from snippets.permissions import IsOwnerOrReadOnly, IsNotBanned
-from snippets.serializers import BannedUserSerializer, SnippetSerializer, UserSerializer
 from django.contrib.auth.models import User
 
 
@@ -61,3 +67,17 @@ class BannedUserViewSet(viewsets.ModelViewSet):
     queryset = BannedUser.objects.all()
     serializer_class = BannedUserSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+
+# TODO: finish this and the snippetsave view
+# class SavedSnippetList(generics.GenericAPIView):
+#     """ Saved Snippets List
+#     User generated lists containing collections of snippets for future reference.
+#     This model links to SnippetSave for the id of the snippet.
+
+#     The user can create lists, delete lists, rename lists from this endpoint
+#     SnippetSave will deal with the adding new snippets to the list
+#     """
+#     queryset = SavedSnippet
+#     serializer_class = SavedSnippetSerializer
+#     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly, IsNotBanned]

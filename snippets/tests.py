@@ -72,6 +72,7 @@ class SnippetTestCase(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 class BannedUserTestCase(TestCase):
     def setUp(self) -> None:
         """Setups a banned user named `neb` and initializes client"""
@@ -120,12 +121,14 @@ class BannedUserTestCase(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+
 def create_banned_user(username, password):
     User = get_user_model()
     user = User.objects.create_user(username=username, password=password)
     ban = BannedUser.objects.create(user_id=user, status="BANNED")
     ban.save()
     return user
+
 
 def create_squashed_ban_user(username, password):
     User = get_user_model()
@@ -134,8 +137,11 @@ def create_squashed_ban_user(username, password):
     ban.save()
     return user
 
+
 def get_bearer_token(client: APIClient, username, password):
     """Requests a token from the API and adds the token into the headers"""
-    bearer_resp = client.post("/api/token/", data={"username":username, "password": password})
-    access_token = bearer_resp.data['access']
-    client.credentials(HTTP_AUTHORIZATION='Token ' + access_token)
+    bearer_resp = client.post(
+        "/api/token/", data={"username": username, "password": password}
+    )
+    access_token = bearer_resp.data["access"]
+    client.credentials(HTTP_AUTHORIZATION="Token " + access_token)

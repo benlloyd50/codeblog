@@ -8,14 +8,16 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
     """Allows owner to update and delete snippets"""
 
     def has_object_permission(self, request, view, obj):
-        """Allows GET requests and when owner the PUT and DELETE"""
+        """Allows GET requests and when owner the update/delete functionalities"""
         if request.method in permissions.SAFE_METHODS:
             return True
 
         return obj.owner == request.user
 
+
 class IsNotBanned(permissions.BasePermission):
     """Allows users without the `BANNED` status to make edits and create new things"""
+
     message = "Banned users may not interact with the data this site"
 
     def has_permission(self, request, view):

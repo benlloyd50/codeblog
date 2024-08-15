@@ -50,3 +50,26 @@ class BannedUser(models.Model):
     def is_banned(self):
         """Checks the status is equal to `BANNED`"""
         return self.status == "BANNED"
+
+
+# create a list of saved snippets.
+# user can have multiple lists, starting with 1
+# lists can have multiple snippets
+
+
+# user creates these as the owner of the list
+class SavedSnippet(models.Model):
+    """The lists of snippets created from the user"""
+
+    user_id = models.ForeignKey(
+        "auth.User",
+        on_delete=models.CASCADE,
+    )
+    name = models.CharField(max_length=100, default="Saved Snippets")
+
+
+class SnippetSave(models.Model):
+    """The snippets saved for each list"""
+
+    list_id = models.ForeignKey(SavedSnippet, on_delete=models.CASCADE)
+    snippet_id = models.ForeignKey(Snippet, on_delete=models.CASCADE)
