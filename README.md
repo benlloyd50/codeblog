@@ -10,6 +10,7 @@ The intent is to provide a developed application using django-restframework.
 - [X] Readonly endpoints not requiring auth
 - [X] Tests for the endpoints to check for validation and success
 - [X] Banned users
+- [ ] User-creatable saved lists
 - [ ] A Frontend
 
 ## Contributing
